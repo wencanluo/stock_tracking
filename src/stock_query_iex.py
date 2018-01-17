@@ -25,11 +25,16 @@ if __name__ == '__main__':
     symbols = util.GetSymbolList()
     
     for symbol in symbols:
+        print symbol
+        outfile = os.path.join(datadir, '%s.json'%symbol)
+        if fio.IsExist(outfile): continue
+        
         raw = stock_query_iex.quote(symbol)
         
-        outfile = os.path.join(datadir, '%s.json'%symbol)
-        with open(outfile, "w") as fout:
-		    json.dump(raw, fout, indent=2, encoding="utf-8")
-		    
-    
+        try:
+            with open(outfile, "w") as fout:
+                json.dump(raw, fout, indent=2, encoding="utf-8")
+        except Exception as e:
+            print e
+
     print "Done"
